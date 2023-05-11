@@ -1,0 +1,22 @@
+import requests
+import json
+
+# 定义要监控的钱包地址
+wallet_address = "0x1234567890abcdef"
+
+# 定义要检查的交易类型
+transaction_type = "buy" # 或者 "sell"
+
+# 定义交易所API URL
+api_url = "https://api.etherscan.io/api?module=account&action=txlist&address=" + wallet_address
+
+# 获取交易历史记录
+response = requests.get(api_url)
+transactions = json.loads(response.text)["result"]
+
+# 遍历交易历史记录
+for transaction in transactions:
+    # 检查交易类型是否符合要求
+    if transaction_type in transaction["input"]:
+        # 发出警报
+        print("警报！发现一个{}交易：{}".format(transaction_type, transaction["hash"]))
